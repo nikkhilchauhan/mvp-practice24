@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { SignedInPanel, SignInPanel } from '../_components/AuthPanel';
 
-export default async function StoreCatchAllPage() {
+export default async function StoreCatchAllPage({ params }: { params: { path?: string[] } }) {
   const hdrs = await headers();
   const host = (hdrs.get('host') ?? '').toLowerCase();
   const primary = (
@@ -36,7 +36,8 @@ export default async function StoreCatchAllPage() {
   }
 
   const session = await getServerSession(authOptions);
-  const isRoot = pathSegments.length === 0;
+  const segments = params.path ?? [];
+  const isRoot = segments.length === 0;
 
   if (isRoot) {
     return (
