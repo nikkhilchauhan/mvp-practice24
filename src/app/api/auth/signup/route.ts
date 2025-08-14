@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { hash } from 'bcryptjs';
 import { z } from 'zod';
+import { ensureSubdomainDnsRecord } from '@/lib/cloudflare';
 
 const reserved = (process.env.RESERVED_SUBDOMAINS ?? 'www,admin,app,api')
   .split(',')
@@ -62,6 +63,13 @@ export async function POST(req: Request) {
     },
     include: { stores: true },
   });
+
+  // Attempt to create DNS record in Cloudflare (best-effort)
+  try {
+    await ensureSubdomainDnsRecord(sub);
+  } catch {
+    // ignore dns errors in signup flow
+  }
 
   const primary = process.env.PRIMARY_DOMAIN ?? 'localhost:3000';
   const isLocal =

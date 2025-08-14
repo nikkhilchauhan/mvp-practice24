@@ -38,6 +38,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 DATABASE_URL="postgresql://appuser:strong-db-pass@localhost:5432/saas?schema=public"
 AUTH_SECRET="eXb4mRpWx+uz/XkfJwMQC7nP8KGIv9wiIhPaJ1vuNGk="
 NEXTAUTH_URL="https://codewithnikhil.com"
+CLOUDFLARE_API_TOKEN=2LVyPEsK5notIRm0kS_v2EWuSIeagomcJvej0TaU
+CLOUDFLARE_ZONE_ID=c784e53eb6d540c5573f74d64a31fe3d
+ORIGIN_IP=139.59.26.230
 PRIMARY_DOMAIN="codewithnikhil.com"
 RESERVED_SUBDOMAINS="www,admin,app,api.login.register"
 
