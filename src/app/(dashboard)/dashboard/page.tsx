@@ -1,18 +1,12 @@
 import { authOptions } from '@/lib/auth';
 import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
-    return (
-      <div className="p-8">
-        <p>You are not signed in.</p>
-        <Link className="underline" href="/signin">
-          Sign in
-        </Link>
-      </div>
-    );
+    redirect('/');
   }
 
   return (
