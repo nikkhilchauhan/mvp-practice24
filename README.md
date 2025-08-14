@@ -34,3 +34,29 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+DATABASE_URL="postgresql://appuser:strong-db-pass@localhost:5432/saas?schema=public"
+AUTH_SECRET="eXb4mRpWx+uz/XkfJwMQC7nP8KGIv9wiIhPaJ1vuNGk="
+NEXTAUTH_URL="https://codewithnikhil.com"
+PRIMARY_DOMAIN="codewithnikhil.com"
+RESERVED_SUBDOMAINS="www,admin,app,api.login.register"
+
+pm2 start npm --name mvp-practice24 -- start'
+
+chown root:root codewithnikhil.com.pem
+chmod 644 codewithnikhil.com.pem
+
+chown root:root codewithnikhil.com.key
+chmod 600 codewithnikhil.com.key
+
+ssl_certificate /etc/ssl/certs/codewithnikhil.com.pem;
+ssl_certificate_key /etc/ssl/private/codewithnikhil.com.key;
+
+nginx -t && systemctl reload nginx
+
+ln -s /etc/nginx/sites-available/mvp-app /etc/nginx/sites-enabled/mvp-practice24
+
+cd /home/app/app
+git pull
+npm ci && npm run build
+pm2 reload mvp-app
