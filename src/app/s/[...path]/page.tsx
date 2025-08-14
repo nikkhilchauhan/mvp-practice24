@@ -5,7 +5,11 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { SignedInPanel, SignInPanel } from '../_components/AuthPanel';
 
-export default async function StoreCatchAllPage({ params }: { params: { path?: string[] } }) {
+export default async function StoreCatchAllPage({
+  params,
+}: {
+  params: Promise<{ path?: string[] }>;
+}) {
   const hdrs = await headers();
   const host = (hdrs.get('host') ?? '').toLowerCase();
   const primary = (
@@ -36,7 +40,8 @@ export default async function StoreCatchAllPage({ params }: { params: { path?: s
   }
 
   const session = await getServerSession(authOptions);
-  const segments = params.path ?? [];
+  const { path: pathSegments = [] } = await params;
+  const segments = pathSegments;
   const isRoot = segments.length === 0;
 
   if (isRoot) {
