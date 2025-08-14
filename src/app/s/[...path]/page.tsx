@@ -1,6 +1,9 @@
 import { headers } from 'next/headers';
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { SignedInPanel, SignInPanel } from '../_components/AuthPanel';
 
 export default async function StoreCatchAllPage() {
   const hdrs = await headers();
@@ -30,6 +33,18 @@ export default async function StoreCatchAllPage() {
       notFound();
     }
     subdomain = store.subdomain;
+  }
+
+  const session = await getServerSession(authOptions);
+  const isRoot = pathSegments.length === 0;
+
+  if (isRoot) {
+    return (
+      <div className="p-10 space-y-6">
+        <h1 className="text-2xl font-semibold">{subdomain}</h1>
+        {session?.user ? <SignedInPanel /> : <SignInPanel />}
+      </div>
+    );
   }
 
   return (

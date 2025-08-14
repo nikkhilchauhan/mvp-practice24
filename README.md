@@ -61,9 +61,9 @@ ln -s /etc/nginx/sites-available/mvp-app /etc/nginx/sites-enabled/mvp-practice24
 
 cd /home/app/mvp-practice24
 git pull
-npm ci && npm run build
+npm ci && c
 pm2 reload mvp-app
 
 pm2 start npm --name mvp-practice24 -- start
 pm2 save
-pm2 startup systemd -u app --hp /home/app
+pm2 startup systemd -u app --hp /home/app/mvp-practice24
