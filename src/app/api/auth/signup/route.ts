@@ -64,7 +64,10 @@ export async function POST(req: Request) {
   });
 
   const primary = process.env.PRIMARY_DOMAIN ?? 'localhost:3000';
-  const redirectUrl = `http://${sub}.${primary}/dashboard`;
+  const isLocal =
+    primary.includes('localhost') || primary.includes('127.0.0.1');
+  const protocol = isLocal ? 'http' : 'https';
+  const redirectUrl = `${protocol}://${sub}.${primary}/dashboard`;
 
   return NextResponse.json({ redirectUrl, userId: user.id });
 }

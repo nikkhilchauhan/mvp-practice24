@@ -37,6 +37,30 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.AUTH_SECRET,
   callbacks: {
+    async signIn({ user, account }) {
+      // Only customize on credentials sign-in
+      if (!user?.id || account?.provider !== 'credentials') {
+        return true;
+      }
+      try {
+        const store = await prisma.store.findFirst({
+          where: { ownerId: String(user.id) },
+          include: { domains: true },
+        });
+        if (!store) return true;
+        const primary = process.env.PRIMARY_DOMAIN ?? 'localhost:3000';
+        const isLocal =
+          primary.includes('localhost') || primary.includes('127.0.0.1');
+        const protocol = isLocal ? 'http' : 'https';
+        const host =
+          store.domains.length > 0
+            ? store.domains[0].host
+            : `${store.subdomain}.${primary}`;
+        return `${protocol}://${host}/dashboard`;
+      } catch {
+        return true;
+      }
+    },
     async jwt({ token, user }) {
       if (user?.id) token.userId = user.id;
       return token;
